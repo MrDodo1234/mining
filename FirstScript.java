@@ -33,8 +33,8 @@ public class FirstScript extends ActiveScript implements PaintListener{
 									new Banking()
 								};
 	//for time display
-	private final Timer time = new Timer(0);
-	private long timeRunning=0;
+	private static final Timer time = new Timer(0);
+	private static long timeRunning = 0;
 	//paint
 	private Image getPaint(String location) {
 		try {
@@ -62,6 +62,7 @@ public class FirstScript extends ActiveScript implements PaintListener{
 	@Override
 	public int loop() {
 		//6 hour paint thing (wann keep dem paints up)
+		//or whatever it is :/
 		if (Game.getClientState() != Game.INDEX_MAP_LOADED) {
 			return 1000;
 		}
@@ -69,7 +70,7 @@ public class FirstScript extends ActiveScript implements PaintListener{
 			WidgetCache.purge();
 			Bot.context().getEventManager().addListener(this);
 			client = Bot.client();
-		}//end 6 hour paint thing
+		}//end 6 hour thing
 		
 		if(Game.isLoggedIn()){
 			for(Node job : jobs){

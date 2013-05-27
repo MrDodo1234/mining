@@ -18,18 +18,19 @@ public class Mine extends Node{
 		if(VARS.miningArea.contains(Players.getLocal()) && !Inventory.isFull()){
 			SceneObject rock = SceneEntities.getNearest(VARS.ORES);
 			VARS.operation = "Looking for ores";
-			if(rock != null){
+			while(rock != null){
 				if(rock.isOnScreen()){
 					if(Players.getLocal().isIdle()){
-						if (Players.getLocal().getAnimation() != 625 && Players.getLocal().getAnimation() != 0){
-							rock.interact("Mine");
+						if (Players.getLocal().getAnimation() != 625){
 							VARS.operation = "Mining ore";
+							rock.interact("Mine");
 							sleep(900, 1100);
 							while(Players.getLocal().getAnimation() == 625)
 								sleep(900, 1100);
 						}
 					}
 				}
+				//else camera turn to rock
 			}
 		}
 	}//end execute
