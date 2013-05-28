@@ -4,7 +4,6 @@ import org.powerbot.core.Bot;
 import org.powerbot.core.event.listeners.PaintListener;
 import org.powerbot.core.script.ActiveScript;
 import org.powerbot.core.script.job.state.Node;
-import org.powerbot.core.script.util.Timer;
 import org.powerbot.game.api.Manifest;
 import org.powerbot.game.api.methods.Game;
 import org.powerbot.game.api.methods.widget.Camera;
@@ -30,11 +29,11 @@ import javax.imageio.ImageIO;
 public class FirstScript extends ActiveScript implements PaintListener{
 	private Client client = Bot.client();
 	private final Node[] jobs = {	new Mine(), 
-									new Banking()
+									new Banking(),
+									new GoToMine(),
+									new GoToBank()
 								};
-	//for time display
-	private static final Timer time = new Timer(0);
-	private static long timeRunning = 0;
+	
 	//paint
 	private Image getPaint(String location) {
 		try {
@@ -46,8 +45,8 @@ public class FirstScript extends ActiveScript implements PaintListener{
 	private final Image paintImg = getPaint("http://i39.tinypic.com/5afktk.png");
 	
 	public void onStart(){
-		while(!Game.isLoggedIn())
-			sleep(500,1000);
+//		while(!Game.isLoggedIn())
+//			sleep(500,1000);
 		while(VARS.startingUp){
 			if(Game.isLoggedIn()){
 				while(Camera.getPitch() < 90){
@@ -86,11 +85,11 @@ public class FirstScript extends ActiveScript implements PaintListener{
 	@Override
 	public void onRepaint(Graphics g1) {
 		Graphics2D g = (Graphics2D) g1;
-		timeRunning = time.getElapsed();
+		VARS.timeRunning = VARS.time.getElapsed();
 		//draw errythaaaang
 		g.drawImage(paintImg, 0, 0, null);
 		g.setColor(Color.white);
-		g.drawString("Time Elapsed: "+Time.format(timeRunning), 75, 29);
+		g.drawString("Time Elapsed: "+Time.format(VARS.timeRunning), 75, 29);
 		g.drawString(""+VARS.operation, 250, 29);
 	}
 }
