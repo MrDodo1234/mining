@@ -1,4 +1,6 @@
-package mining;
+package mining.NODES;
+
+import mining.VARS;
 
 import org.powerbot.core.script.job.state.Node;
 import org.powerbot.game.api.methods.interactive.Players;

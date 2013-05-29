@@ -1,5 +1,10 @@
 package mining;
 
+import mining.NODES.Banking;
+import mining.NODES.GoToBank;
+import mining.NODES.GoToMine;
+import mining.NODES.Mine;
+
 import org.powerbot.core.Bot;
 import org.powerbot.core.event.events.MessageEvent;
 import org.powerbot.core.event.listeners.MessageListener;
