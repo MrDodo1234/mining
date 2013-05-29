@@ -14,12 +14,16 @@ public class Banking extends Node{
 
 	@Override
 	public void execute() {
+		VARS.operation = "Banking";
 		//when at bank deposit items
-		while(Inventory.isFull() && VARS.bankingArea.contains(Players.getLocal())){
-			Bank.open();
-			Bank.deposit(VARS.INVENTORY_ITEMS, Inventory.getCount(VARS.INVENTORY_ITEMS));
-			Bank.close();
-		}
+		Bank.open();
+		Bank.deposit(VARS.INVENTORY_ITEMS, Inventory.getCount(VARS.INVENTORY_ITEMS));
+			for(int i = 1617; i <= 1624; i++){
+				while(Inventory.contains(i)){
+					Bank.deposit(i, Inventory.getCount(i));
+				}
+			}
+		Bank.close();
 	}
 	
 }
