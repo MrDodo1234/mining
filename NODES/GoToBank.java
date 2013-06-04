@@ -1,5 +1,6 @@
 package mining.NODES;
 
+import mining.EfficientMiner;
 import mining.VARS;
 
 import org.powerbot.core.script.job.state.Node;
@@ -10,18 +11,13 @@ public class GoToBank extends Node{
 
 	@Override
 	public boolean activate() {
-		return Inventory.isFull() && !VARS.bankingArea.contains(Players.getLocal());
+		return Inventory.isFull() && !VARS.BANKING_AREA.contains(Players.getLocal());
 	}
 
 	@Override
 	public void execute() {
-		VARS.failsafeCount = 0;
-		while(!VARS.PATH_TO_BANK.getEnd().isOnScreen() && VARS.failsafeCount++ <10){
-			VARS.operation = "Going to mines";
-			VARS.PATH_TO_BANK.traverse();
-			//sleep(Players.getLocal().getLocation() Walking.getDestination());
-		}
-		
+		EfficientMiner.operation = "Going to bank";
+		VARS.PATH_TO_BANK.traverse();
 	}
 
 }

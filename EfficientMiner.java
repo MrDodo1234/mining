@@ -1,5 +1,6 @@
 package mining;
 
+import mining.NODES.AboveBank;
 import mining.NODES.Banking;
 import mining.NODES.GoToBank;
 import mining.NODES.GoToMine;
@@ -34,16 +35,23 @@ import javax.imageio.ImageIO;
 
 @Manifest(		
 		authors = "MrDodo", 
-		name = "First Script", 
-		description = "Mines and banks iron ore in my fav location"
+		name = "Efficient Miner", 
+		description = "Mines and banks iron ore in my fav location: Varrock East"
 		)
-public class FirstScript extends ActiveScript implements PaintListener, MessageListener{
+public class EfficientMiner extends ActiveScript implements PaintListener, MessageListener{
 	private Client client = Bot.client();
 	private final Node[] jobs = {	new Mine(), 
 									new Banking(),
 									new GoToMine(),
-									new GoToBank()
+									new GoToBank(),
+									new AboveBank()
 								};
+	//VARIABLES///////////////////////
+	private int startExp, expGained, levelsGained, startLevel;
+	private int oresMined = 0;
+	public static String operation="";
+	//END VARIABLES///////////////////
+	
 	
 	//paint
 	private Image getPaint(String location) {
@@ -57,10 +65,9 @@ public class FirstScript extends ActiveScript implements PaintListener, MessageL
 	
 	public void onStart(){
 		if(Game.isLoggedIn()){
-			VARS.startExp = Skills.getExperience(Skills.MINING);
+			startExp = Skills.getExperience(Skills.MINING);
 		}
 	}
-	
 	@Override
 	public int loop() {
 		//6 hour paint thing (wann keep dem paints up)
@@ -89,19 +96,22 @@ public class FirstScript extends ActiveScript implements PaintListener, MessageL
 	@Override
 	public void onRepaint(Graphics g1) {
 		//get variables and set shizz
-		VARS.levelsGained = Skills.getLevel(Skills.MINING);
-		VARS.expGained = Skills.getExperience(Skills.MINING) - VARS.startExp;
-		Graphics2D g = (Graphics2D) g1;
-		drawMouse(g);
-		VARS.timeRunning = VARS.time.getElapsed();
-		
-		//draw errythaaaang
-		g.drawImage(paintImg, 0, 0, null);
-		g.setColor(Color.white);
-		g.drawString("Time Elapsed: "+Time.format(VARS.timeRunning), 75, 29);
-		g.drawString(""+VARS.operation, 250, 29);
-		g.drawString("Ores Mined: "+VARS.oresMined+" ("+UTIL.getPerHour(VARS.oresMined)+"/h)", 390, 29);
-		g.drawString("Exp gained: "+VARS.expGained+" ("+UTIL.getPerHour(VARS.expGained)+"/h)", 550, 29);
+		if(Game.isLoggedIn()){
+			startLevel = Skills.getLevel(Skills.MINING);
+			levelsGained = Skills.getLevel(Skills.MINING) - startLevel;
+			expGained = Skills.getExperience(Skills.MINING) - startExp;
+			Graphics2D g = (Graphics2D) g1;
+			drawMouse(g);
+			VARS.timeRunning = System.currentTimeMillis() - VARS.startTime;
+			
+			//draw errythaaaang
+			g.drawImage(paintImg, 0, 0, null);
+			g.setColor(Color.white);
+			g.drawString("Time Elapsed: "+Time.format(VARS.timeRunning), 75, 29);
+			g.drawString(""+operation, 250, 29);
+			g.drawString("Ores Mined: "+oresMined+" ("+UTIL.getPerHour(oresMined)+"/h)", 390, 29);
+			g.drawString("Exp gained: "+expGained+" ("+UTIL.getPerHour(expGained)+"/h) +"+levelsGained, 550, 29);
+		}
 	}
 	private void drawMouse(final Graphics2D g) {
 		final Point mouse = Mouse.getLocation();
@@ -121,12 +131,15 @@ public class FirstScript extends ActiveScript implements PaintListener, MessageL
 		g.setColor(Color.CYAN);
 		g.fillOval(mouse.x-1, mouse.y-1, 3, 3);
 	}
-
+	
 	@Override
-	public void messageReceived(MessageEvent e) {
-		final String msg = e.getMessage().toLowerCase();
-		if(msg.contains("manage to mine some iron")){
-			VARS.oresMined++;
+	public void messageReceived(MessageEvent me) {
+		final String msg = me.getMessage().toLowerCase();
+		if(me.getId() == 109){
+			if(msg.contains("manage to mine some iron")){
+				oresMined++;
+			}
 	    }
+		
 	}
 }
